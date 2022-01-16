@@ -1,12 +1,12 @@
 from flask import Flask
 from flask import request
+import re
 
 app = Flask(__name__)
 
 @app.route("/")
 def index():
     question = request.args.get("celsius", "")
-    ans = run(question)
     return (
         """<form action="" method="get">
                 <input type="text" name="celsius">
@@ -15,4 +15,5 @@ def index():
         + question
     )
 
-
+if __name__ == '__main__':
+    app.run()
