@@ -1,71 +1,33 @@
 import re
 
-def indexWithFraction(question):
-    fraction = question.split('/')
-    nominator = sorted(index.findall(fraction[0]))
-    denominator = sorted(index.findall(fraction[1]))
-    nominator_left = nominator.copy()
-    denominator_left = denominator.copy()
-    for n in nominator:
-        for d in denominator:
-            if n[0] == d[0]:
-                if len(n) == 1:
-                    upper = 1
-                else:
-                    upper = int(n[2:])
-                if len(d) == 1:
-                    lower = 1
-                else:
-                    lower = int(d[2:])
-
-                index_rule = upper - lower
-                ans.append(n[0] + '^' + str(index_rule))
-                nominator_left.remove(n)
-                denominator_left.remove(d)
-    for n in nominator_left:
-        ans.append(n)
-    for d in denominator_left:
-        if len(d) == 1:
-            reverse = -1
-        else:
-            reverse  = -int(d[2:])
-        ans.append(d[0] + '^' + str(reverse))
-
-def indexWithoutFraction(question):
+def collect_term(question):
+    #define expression of index form
+    index = re.compile(r'[a-z]\^?-?\d*')
+    #seperate each index
     nominator = sorted(index.findall(question))
+    #collec the same term of expression using dictonary
+    ans = {}
+    #the ouput text
+    ans_string = ""
+    #loop all index
     for n in nominator:
-        ans.append(n)
-
-def expressPositiveIndex():
-    ans_nominator = []
-    ans_denominator = []
-    for m in ans:
-        if len(m) == 1:
-            continue
-        if m[2] == '-':
-            if m[3:] == '1':
-                ans_denominator.append(m[0])
+        if n[0] not in ans.keys():
+            if len(n) == 1:
+                ans[n] = 1
             else:
-                ans_denominator.append(m[0:2] + m[3:])
+                ans[n[0]] = int(n[2:])
         else:
-            if m[2:] == '1':
-                ans_nominator.append(m[0])
+            if len(n) == 1:
+                ans[n] = ans[n] + 1
             else:
-                ans_nominator.append(m)
-    if len(ans_nominator) != 0 and len(ans_denominator) != 0:
-        finalAns = ('').join(ans_nominator) + '/' + ('').join(ans_denominator)
-    elif len(ans_nominator) == 0:
-        finalAns =  '1/' + ('').join(ans_denominator)
-    else:
-        finalAns =  ('').join(ans_nominator)
-    return finalAns
+                ans[n[0]] = ans[n[0]] + int(n[2:])
+    #produce print answers
+    for k, v in ans.items():
+        if v == 1:
+            ans_string = ans_string + k
+        else:
+            ans_string = ans_string + k + '^' + str(v)
+    return ans_string
 
 def simplify_index(question):
-    global ans, index
-    ans = []
-    index = re.compile(r'[a-z]\^?-?\d*')
-    if '/' in question:
-        indexWithFraction(question)
-    else:
-        indexWithoutFraction(question)
-    return expressPositiveIndex()
+    return collect_term(question)

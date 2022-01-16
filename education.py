@@ -4,7 +4,7 @@ from simplify_index import simplify_index
 
 app = Flask(__name__)
 
-@app.route("/")
+@app.route("/simplify-index")
 def index():
     question = request.args.get("celsius", "")
     ans = simplify_index(question)
@@ -13,7 +13,7 @@ def index():
                 <input type="text" name="celsius">
                 <input type="submit" value="Convert">
             </form>"""
-        + "the simplyfied form of " + question + " is "
+        + "the simplified form of " + question + " is "
         + ans
     )
 
