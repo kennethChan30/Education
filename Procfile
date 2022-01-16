@@ -1,1 +1,2 @@
-web: gunicorn --bind 0.0.0.0:$PORT hello:app
+web:python hello.py
+worker: python hello.py
