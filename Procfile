@@ -1,1 +1,1 @@
-web: gunicorn hello:index-simplify
+web: gunicorn hello:app
